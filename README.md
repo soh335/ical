@@ -3,3 +3,12 @@
 # ical
 
 simple ical encoder for me.
+
+## Support Components
+
+* [x] Event Component
+* [ ] To-do Component
+* [ ] Journal Component
+* [ ] Free/Busy Component
+* [ ] Time Zone Component
+* [ ] Alarm Component
