@@ -4,7 +4,7 @@
 
 simple ical encoder for me.
 
-## Support extenstions
+## Support Extenstions
 
 * X-WR-CALNAME
 * X-WR-CALDESC
