@@ -4,6 +4,12 @@
 
 simple ical encoder for me.
 
+## Support extenstions
+
+* X-WR-CALNAME
+* X-WR-CALDESC
+* X-WR-TIMEZONE
+
 ## Support Components
 
 * [x] Event Component
