@@ -2,7 +2,7 @@
 
 # ical
 
-simple ical encoder for me.
+my simple ical encoder for golang.
 
 ## Support Extenstions
 
