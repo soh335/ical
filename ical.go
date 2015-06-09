@@ -10,6 +10,7 @@ import (
 
 const (
 	stampLayout    = "20060102T150405Z"
+	dateLayout     = "20060102"
 	dateTimeLayout = "20060102T150405"
 )
 
@@ -81,9 +82,21 @@ type VEvent struct {
 	DTEND   time.Time
 	SUMMARY string
 	TZID    string
+
+	AllDay bool
 }
 
 func (e *VEvent) EncodeIcal(w io.Writer) error {
+
+	var timeStampLayout, timeStampType string
+
+	if e.AllDay {
+		timeStampLayout = dateLayout
+		timeStampType = "DATE"
+	} else {
+		timeStampLayout = dateTimeLayout
+		timeStampType = "DATE-TIME"
+	}
 
 	b := bufio.NewWriter(w)
 	if _, err := b.WriteString("BEGIN:VEVENT\r\n"); err != nil {
@@ -101,10 +114,10 @@ func (e *VEvent) EncodeIcal(w io.Writer) error {
 	if _, err := b.WriteString("SUMMARY:" + e.SUMMARY + "\r\n"); err != nil {
 		return err
 	}
-	if _, err := b.WriteString("DTSTART;TZID=" + e.TZID + ":" + e.DTSTART.Format(dateTimeLayout) + "\r\n"); err != nil {
+	if _, err := b.WriteString("DTSTART;TZID=" + e.TZID + ";VALUE=" + timeStampType + ":" + e.DTSTART.Format(timeStampLayout) + "\r\n"); err != nil {
 		return err
 	}
-	if _, err := b.WriteString("DTEND;TZID=" + e.TZID + ":" + e.DTEND.Format(dateTimeLayout) + "\r\n"); err != nil {
+	if _, err := b.WriteString("DTEND;TZID=" + e.TZID + ";VALUE=" + timeStampType + ":" + e.DTEND.Format(timeStampLayout) + "\r\n"); err != nil {
 		return err
 	}
 	if _, err := b.WriteString("END:VEVENT\r\n"); err != nil {

@@ -56,8 +56,54 @@ DTSTAMP:20131231T150000Z
 UID:123
 TZID:Asia/Tokyo
 SUMMARY:summary
-DTSTART;TZID=Asia/Tokyo:20140101T000000
-DTEND;TZID=Asia/Tokyo:20140101T000000
+DTSTART;TZID=Asia/Tokyo;VALUE=DATE-TIME:20140101T000000
+DTEND;TZID=Asia/Tokyo;VALUE=DATE-TIME:20140101T000000
+END:VEVENT
+END:VCALENDAR
+`
+	expect = unixToDOSLineEndings(expect)
+
+	if s := b.String(); s != expect {
+		t.Errorf("should %v. but got %v", expect, s)
+	}
+}
+
+func testEncodeAllDayTrue(t *testing.T) {
+	zone := time.FixedZone("Asia/Tokyo", 60*60*9)
+	d := time.Date(2014, time.Month(1), 1, 0, 0, 0, 0, zone)
+
+	vComponents := []VComponent{
+		&VEvent{
+			UID:     "123",
+			DTSTAMP: d,
+			DTSTART: d,
+			DTEND:   d,
+			SUMMARY: "summary",
+			TZID:    "Asia/Tokyo",
+
+			AllDay: true,
+		},
+	}
+
+	b, err := testSetup(vComponents)
+	if err != nil {
+		t.Error("got err:", err)
+	}
+
+	expect := `BEGIN:VCALENDAR
+PRODID:proid
+CALSCALE:GREGORIAN
+VERSION:2.0
+X-WR-CALNAME:name
+X-WR-CALDESC:desc
+X-WR-TIMEZONE:Asia/Tokyo
+BEGIN:VEVENT
+DTSTAMP:20131231T150000Z
+UID:123
+TZID:Asia/Tokyo
+SUMMARY:summary
+DTSTART;TZID=Asia/Tokyo;VALUE=DATE:20140101
+DTEND;TZID=Asia/Tokyo;VALUE=DATE:20140101
 END:VEVENT
 END:VCALENDAR
 `
