@@ -61,9 +61,13 @@ DTEND;TZID=Asia/Tokyo:20140101T000000
 END:VEVENT
 END:VCALENDAR
 `
-	expect = strings.Replace(expect, "\n", "\r\n", -1)
+	expect = unixToDOSLineEndings(expect)
 
 	if s := b.String(); s != expect {
 		t.Errorf("should %v. but got %v", expect, s)
 	}
+}
+
+func unixToDOSLineEndings(input string) string {
+	return strings.Replace(input, "\n", "\r\n", -1)
 }
