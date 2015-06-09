@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func test_Encode(t *testing.T) {
+func testEncode(t *testing.T) {
 	c := NewBasicVCalendar()
 	c.PRODID = "proid"
 	c.X_WR_TIMEZONE = "Asia/Tokyo"
