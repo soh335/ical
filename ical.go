@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	stampLayout = "20060102T150405Z"
-	dateLayout  = "20060102T150405"
+	stampLayout    = "20060102T150405Z"
+	dateTimeLayout = "20060102T150405"
 )
 
 type VCalendar struct {
@@ -101,10 +101,10 @@ func (e *VEvent) EncodeIcal(w io.Writer) error {
 	if _, err := b.WriteString("SUMMARY:" + e.SUMMARY + "\r\n"); err != nil {
 		return err
 	}
-	if _, err := b.WriteString("DTSTART;TZID=" + e.TZID + ":" + e.DTSTART.Format(dateLayout) + "\r\n"); err != nil {
+	if _, err := b.WriteString("DTSTART;TZID=" + e.TZID + ":" + e.DTSTART.Format(dateTimeLayout) + "\r\n"); err != nil {
 		return err
 	}
-	if _, err := b.WriteString("DTEND;TZID=" + e.TZID + ":" + e.DTEND.Format(dateLayout) + "\r\n"); err != nil {
+	if _, err := b.WriteString("DTEND;TZID=" + e.TZID + ":" + e.DTEND.Format(dateTimeLayout) + "\r\n"); err != nil {
 		return err
 	}
 	if _, err := b.WriteString("END:VEVENT\r\n"); err != nil {
