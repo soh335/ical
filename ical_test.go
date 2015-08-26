@@ -24,7 +24,7 @@ func testSetup(vComponents []VComponent) (bytes.Buffer, error) {
 	return b, nil
 }
 
-func testEncode(t *testing.T) {
+func TestEncode(t *testing.T) {
 	zone := time.FixedZone("Asia/Tokyo", 60*60*9)
 	d := time.Date(2014, time.Month(1), 1, 0, 0, 0, 0, zone)
 
@@ -68,7 +68,7 @@ END:VCALENDAR
 	}
 }
 
-func testEncodeAllDayTrue(t *testing.T) {
+func TestEncodeAllDayTrue(t *testing.T) {
 	zone := time.FixedZone("Asia/Tokyo", 60*60*9)
 	d := time.Date(2014, time.Month(1), 1, 0, 0, 0, 0, zone)
 
