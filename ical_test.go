@@ -7,23 +7,6 @@ import (
 	"time"
 )
 
-func testSetup(vComponents []VComponent) (bytes.Buffer, error) {
-	c := NewBasicVCalendar()
-	c.PRODID = "proid"
-	c.X_WR_TIMEZONE = "Asia/Tokyo"
-	c.X_WR_CALNAME = "name"
-	c.X_WR_CALDESC = "desc"
-
-	c.VComponent = vComponents
-
-	var b bytes.Buffer
-	if err := c.Encode(&b); err != nil {
-		return b, err
-	}
-
-	return b, nil
-}
-
 func TestEncode(t *testing.T) {
 	zone := time.FixedZone("Asia/Tokyo", 60*60*9)
 	d := time.Date(2014, time.Month(1), 1, 0, 0, 0, 0, zone)
@@ -116,4 +99,21 @@ END:VCALENDAR
 
 func unixToDOSLineEndings(input string) string {
 	return strings.Replace(input, "\n", "\r\n", -1)
+}
+
+func testSetup(vComponents []VComponent) (bytes.Buffer, error) {
+	c := NewBasicVCalendar()
+	c.PRODID = "proid"
+	c.X_WR_TIMEZONE = "Asia/Tokyo"
+	c.X_WR_CALNAME = "name"
+	c.X_WR_CALDESC = "desc"
+
+	c.VComponent = vComponents
+
+	var b bytes.Buffer
+	if err := c.Encode(&b); err != nil {
+		return b, err
+	}
+
+	return b, nil
 }
