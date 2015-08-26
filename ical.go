@@ -39,23 +39,26 @@ func (c *VCalendar) Encode(w io.Writer) error {
 	if _, err := b.WriteString("BEGIN:VCALENDAR\r\n"); err != nil {
 		return err
 	}
-	if _, err := b.WriteString("PRODID:" + c.PRODID + "\r\n"); err != nil {
-		return err
+
+	// use a slice map to preserve order during for range
+	attrs := []map[string]string{
+		{"VERSION:": c.VERSION},
+		{"PRODID:": c.PRODID},
+		{"X-WR-CALNAME:": c.X_WR_CALNAME},
+		{"X-WR-CALDESC:": c.X_WR_CALDESC},
+		{"X-WR-TIMEZONE:": c.X_WR_TIMEZONE},
+		{"CALSCALE:": c.CALSCALE},
 	}
-	if _, err := b.WriteString("CALSCALE:" + c.CALSCALE + "\r\n"); err != nil {
-		return err
-	}
-	if _, err := b.WriteString("VERSION:" + c.VERSION + "\r\n"); err != nil {
-		return err
-	}
-	if _, err := b.WriteString("X-WR-CALNAME:" + c.X_WR_CALNAME + "\r\n"); err != nil {
-		return err
-	}
-	if _, err := b.WriteString("X-WR-CALDESC:" + c.X_WR_CALDESC + "\r\n"); err != nil {
-		return err
-	}
-	if _, err := b.WriteString("X-WR-TIMEZONE:" + c.X_WR_TIMEZONE + "\r\n"); err != nil {
-		return err
+
+	for _, item := range attrs {
+		for k, v := range item {
+			if len(v) == 0 {
+				continue
+			}
+			if _, err := b.WriteString(k + v + "\r\n"); err != nil {
+				return err
+			}
+		}
 	}
 
 	for _, component := range c.VComponent {
