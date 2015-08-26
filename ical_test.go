@@ -149,6 +149,93 @@ END:VCALENDAR
 	}
 }
 
+func TestEncodeNoTzid(t *testing.T) {
+	zone := time.FixedZone("Asia/Tokyo", 60*60*9)
+	d := time.Date(2014, time.Month(1), 1, 0, 0, 0, 0, zone)
+
+	vComponents := []VComponent{
+		&VEvent{
+			UID:     "123",
+			DTSTAMP: d,
+			DTSTART: d,
+			DTEND:   d,
+			SUMMARY: "summary",
+			AllDay:  true,
+		},
+	}
+
+	b, err := testSetup(vComponents)
+	if err != nil {
+		t.Error("got err:", err)
+	}
+
+	expect := `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:proid
+X-WR-CALNAME:name
+X-WR-CALDESC:desc
+X-WR-TIMEZONE:Asia/Tokyo
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+DTSTAMP:20131231T150000Z
+UID:123
+SUMMARY:summary
+DTSTART;VALUE=DATE:20140101
+DTEND;VALUE=DATE:20140101
+END:VEVENT
+END:VCALENDAR
+`
+	expect = unixToDOSLineEndings(expect)
+
+	if s := b.String(); s != expect {
+		t.Errorf("should %v. but got %v", expect, s)
+	}
+}
+
+func TestEncodeUtcTzid(t *testing.T) {
+	zone := time.FixedZone("Asia/Tokyo", 60*60*9)
+	d := time.Date(2014, time.Month(1), 1, 0, 0, 0, 0, zone)
+
+	vComponents := []VComponent{
+		&VEvent{
+			UID:     "123",
+			DTSTAMP: d,
+			DTSTART: d,
+			DTEND:   d,
+			SUMMARY: "summary",
+			TZID:    "UTC",
+			AllDay:  true,
+		},
+	}
+
+	b, err := testSetup(vComponents)
+	if err != nil {
+		t.Error("got err:", err)
+	}
+
+	expect := `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:proid
+X-WR-CALNAME:name
+X-WR-CALDESC:desc
+X-WR-TIMEZONE:Asia/Tokyo
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+DTSTAMP:20131231T150000Z
+UID:123
+SUMMARY:summary
+DTSTART;VALUE=DATE:20140101
+DTEND;VALUE=DATE:20140101
+END:VEVENT
+END:VCALENDAR
+`
+	expect = unixToDOSLineEndings(expect)
+
+	if s := b.String(); s != expect {
+		t.Errorf("should %v. but got %v", expect, s)
+	}
+}
+
 func unixToDOSLineEndings(input string) string {
 	return strings.Replace(input, "\n", "\r\n", -1)
 }
