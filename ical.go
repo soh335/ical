@@ -139,12 +139,13 @@ func (e *VEvent) EncodeIcal(w io.Writer) error {
 	} else {
 		timeStampLayout = dateTimeLayout
 		timeStampType = "DATE-TIME"
+		if len(e.TZID) == 0 || e.TZID == "UTC" {
+			timeStampLayout = timeStampLayout + "Z"
+		}
 	}
 
 	if len(e.TZID) != 0 && e.TZID != "UTC" {
 		tzidTxt = "TZID=" + e.TZID + ";"
-	} else {
-		timeStampLayout = timeStampLayout + "Z"
 	}
 
 	b := bufio.NewWriter(w)
