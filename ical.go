@@ -131,7 +131,7 @@ type VEvent struct {
 
 func (e *VEvent) EncodeIcal(w io.Writer) error {
 
-	var timeStampLayout, timeStampType string
+	var timeStampLayout, timeStampType, tzidTxt string
 
 	if e.AllDay {
 		timeStampLayout = dateLayout
@@ -139,6 +139,12 @@ func (e *VEvent) EncodeIcal(w io.Writer) error {
 	} else {
 		timeStampLayout = dateTimeLayout
 		timeStampType = "DATE-TIME"
+	}
+
+	if len(e.TZID) != 0 && e.TZID != "UTC" {
+		tzidTxt = "TZID=" + e.TZID + ";"
+	} else {
+		timeStampLayout = timeStampLayout + "Z"
 	}
 
 	b := bufio.NewWriter(w)
@@ -153,18 +159,13 @@ func (e *VEvent) EncodeIcal(w io.Writer) error {
 	}
 
 	if len(e.TZID) != 0 && e.TZID != "UTC" {
-	if _, err := b.WriteString("TZID:" + e.TZID + "\r\n"); err != nil {
-		return err
-	}
+		if _, err := b.WriteString("TZID:" + e.TZID + "\r\n"); err != nil {
+			return err
+		}
 	}
 
 	if _, err := b.WriteString("SUMMARY:" + e.SUMMARY + "\r\n"); err != nil {
 		return err
-	}
-
-	var tzidTxt string
-	if len(e.TZID) != 0 && e.TZID != "UTC" {
-		tzidTxt = "TZID=" + e.TZID + ";"
 	}
 
 	if _, err := b.WriteString("DTSTART;" + tzidTxt + "VALUE=" + timeStampType + ":" + e.DTSTART.Format(timeStampLayout) + "\r\n"); err != nil {
