@@ -119,12 +119,13 @@ type VComponent interface {
 }
 
 type VEvent struct {
-	UID     string
-	DTSTAMP time.Time
-	DTSTART time.Time
-	DTEND   time.Time
-	SUMMARY string
-	TZID    string
+	UID         string
+	DTSTAMP     time.Time
+	DTSTART     time.Time
+	DTEND       time.Time
+	SUMMARY     string
+	DESCRIPTION string
+	TZID        string
 
 	AllDay bool
 }
@@ -168,7 +169,11 @@ func (e *VEvent) EncodeIcal(w io.Writer) error {
 	if _, err := b.WriteString("SUMMARY:" + e.SUMMARY + "\r\n"); err != nil {
 		return err
 	}
-
+	if e.DESCRIPTION != "" {
+		if _, err := b.WriteString("DESCRIPTION:" + e.DESCRIPTION + "\r\n"); err != nil {
+			return err
+		}
+	}
 	if _, err := b.WriteString("DTSTART;" + tzidTxt + "VALUE=" + timeStampType + ":" + e.DTSTART.Format(timeStampLayout) + "\r\n"); err != nil {
 		return err
 	}

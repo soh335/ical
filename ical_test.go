@@ -13,12 +13,13 @@ func TestEncode(t *testing.T) {
 
 	vComponents := []VComponent{
 		&VEvent{
-			UID:     "123",
-			DTSTAMP: d,
-			DTSTART: d,
-			DTEND:   d,
-			SUMMARY: "summary",
-			TZID:    "Asia/Tokyo",
+			UID:         "123",
+			DTSTAMP:     d,
+			DTSTART:     d,
+			DTEND:       d,
+			SUMMARY:     "summary",
+			DESCRIPTION: "description",
+			TZID:        "Asia/Tokyo",
 		},
 	}
 
@@ -39,6 +40,7 @@ DTSTAMP:20131231T150000Z
 UID:123
 TZID:Asia/Tokyo
 SUMMARY:summary
+DESCRIPTION:description
 DTSTART;TZID=Asia/Tokyo;VALUE=DATE-TIME:20140101T000000
 DTEND;TZID=Asia/Tokyo;VALUE=DATE-TIME:20140101T000000
 END:VEVENT
