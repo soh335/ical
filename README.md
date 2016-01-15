@@ -18,3 +18,7 @@ my simple ical encoder for golang.
 * [ ] Free/Busy Component
 * [ ] Time Zone Component
 * [ ] Alarm Component
+
+## TODO
+
+* 75 octets folding (https://tools.ietf.org/html/rfc5545#section-3.1)
